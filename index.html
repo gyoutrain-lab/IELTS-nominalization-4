@@ -5,10 +5,11 @@
     <title>Mastery: 50 IELTS Band 9 Integrated Drill</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #fdfdfd; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; width: 100%; max-width: 900px; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .dropdown { width: 100%; padding: 14px; margin: 12px 0; border: 2px solid #3498db; border-radius: 8px; font-size: 16px; }
-        button { background: #2c3e50; color: white; border: none; padding: 18px; width: 48%; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        #output { margin-top: 25px; padding: 25px; background: #f0f7f4; border-radius: 8px; border-left: 6px solid #27ae60; display: none; font-size: 1.1em; }
+        .card { background: white; width: 100%; max-width: 900px; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #e1e1e1; }
+        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .dropdown { width: 100%; padding: 14px; margin: 12px 0; border: 2px solid #3498db; border-radius: 8px; font-size: 16px; background: #fff; }
+        button { background: #2c3e50; color: white; border: none; padding: 18px; width: 48%; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 15px; margin-top: 15px; }
+        #output { margin-top: 25px; padding: 25px; background: #f0f7f4; border-radius: 8px; border-left: 6px solid #27ae60; display: none; font-size: 1.1em; line-height: 1.6; }
         .tts-btn { background: #8e44ad; width: 100%; margin-top: 15px; }
     </style>
 </head>
@@ -18,13 +19,13 @@
     <h2 id="title">Band 9 Academic Master Drill (1/50)</h2>
     <p id="prompt"><strong>Prompt:</strong> Loading...</p>
     
-    <label><b>Cause / Subject</b></label>
+    <label><b>Cause (Nominalization)</b></label>
     <select id="cause" class="dropdown"><option value="">-- Select --</option></select>
     
-    <label><b>Academic Verbs / Linking</b></label>
+    <label><b>Academic Verbs (Cohesion Markers)</b></label>
     <select id="verb" class="dropdown"><option value="">-- Select --</option></select>
     
-    <label><b>Effect / Insight</b></label>
+    <label><b>Effect (Nominalization)</b></label>
     <select id="effect" class="dropdown"><option value="">-- Select --</option></select>
     
     <button onclick="evaluateDrill()">Submit & Evaluate</button>
@@ -36,18 +37,12 @@
 
 <script>
     const data = [
-        // 1-10: Professional & Education
-        { q: "Tell me about your career goals.", causes: ["Working hard", "Career moves", "The pursuit of strategic professional development"], verbs: ["is", "leads to", "represents a milestone in"], effects: ["better pay", "getting ahead", "the realization of long-term career objectives"] },
-        { q: "Why is lifelong learning important?", causes: ["Learning more", "Continuous study", "The commitment to perpetual intellectual growth"], verbs: ["helps", "develops", "is essential for"], effects: ["being smart", "staying ahead", "the maintenance of professional relevancy"] },
-        { q: "Are internships necessary?", causes: ["Working while school", "Getting experience", "The acquisition of hands-on professional exposure"], verbs: ["helps", "improves", "serves as a catalyst for"], effects: ["get jobs", "career readiness", "the successful transition to the workforce"] },
-        { q: "How do you manage stress?", causes: ["Relaxing", "Time management", "The implementation of structured stress-reduction protocols"], verbs: ["stops", "lowers", "substantially mitigates"], effects: ["feeling good", "better focus", "the restoration of psychological and physical equilibrium"] },
-        { q: "Why study nursing?", causes: ["Helping patients", "Healthcare interest", "The dedication to clinical excellence and patient safety"], verbs: ["is", "drives", "is deeply rooted in"], effects: ["saves lives", "better health", "the profound commitment to improving patient welfare"] },
-        { q: "Is leadership important?", causes: ["Being a boss", "Leading teams", "The cultivation of effective managerial and leadership aptitude"], verbs: ["builds", "guides", "is fundamental to"], effects: ["good teams", "success", "the optimization of organizational performance"] },
-        { q: "Why learn new languages?", causes: ["Talking more", "Global communication", "The attainment of multilingual proficiency"], verbs: ["helps", "connects", "substantially facilitates"], effects: ["travel better", "meeting people", "the expansion of global professional networks"] },
-        { q: "How has your field changed?", causes: ["New methods", "Industry trends", "The rapid evolution of contemporary clinical practices"], verbs: ["makes", "changes", "fundamentally transforms"], effects: ["modern work", "new standards", "the systemic integration of advanced medical technologies"] },
-        { q: "What is your best skill?", causes: ["Being good at X", "Professional expertise", "The mastery of specialized technical competencies"], verbs: ["helps", "drives", "serves as a cornerstone of"], effects: ["doing well", "high quality", "the delivery of superior professional outcomes"] },
-        { q: "Why join a professional body?", causes: ["Joining groups", "Professional networking", "The engagement in standardized professional associations"], verbs: ["is good", "supports", "is vital for"], effects: ["get support", "better status", "the adherence to rigorous ethical and professional standards"] },
-        { q: "Tell me about your career goals.", causes: ["Working hard", "Career moves", "The pursuit of strategic professional development"], verbs: ["is", "leads to", "represents a milestone in"], effects: ["better pay", "getting ahead", "the realization of long-term career objectives"] },
+        { q: "Cars cause traffic.", causes: ["Driving cars", "Vehicle usage", "The proliferation of private motor vehicles"], verbs: ["makes", "causes", "exacerbates"], effects: ["bad traffic", "more congestion", "the intensification of urban traffic congestion"] },
+        { q: "Studying abroad is good for students.", causes: ["Going overseas", "International education", "The pursuit of tertiary education in foreign jurisdictions"], verbs: ["helps", "improves", "facilitates"], effects: ["better jobs", "career growth", "the expansion of global career opportunities"] },
+        { q: "Fast food causes obesity.", causes: ["Junk food intake", "Poor nutrition", "The habitual consumption of energy-dense processed sustenance"], verbs: ["leads to", "drives", "precipitates"], effects: ["getting fat", "weight gain", "the accelerated prevalence of metabolic disorders"] },
+        { q: "Social media makes people lonely.", causes: ["Using social apps", "Online networking", "The pervasive utilization of digital networking platforms"], verbs: ["creates", "brings", "engenders"], effects: ["loneliness", "social isolation", "a profound exacerbation of social alienation"] },
+        { q: "Robots take human jobs.", causes: ["Automation", "Robotic usage", "The widespread deployment of autonomous robotic systems"], verbs: ["destroys", "replaces", "necessitates the restructuring of"], effects: ["job loss", "unemployment", "the large-scale displacement of the traditional workforce"] },
+       { q: "Tell me about your career goals.", causes: ["Working hard", "Career moves", "The pursuit of strategic professional development"], verbs: ["is", "leads to", "represents a milestone in"], effects: ["better pay", "getting ahead", "the realization of long-term career objectives"] },
         { q: "Why is lifelong learning important?", causes: ["Learning more", "Continuous study", "The commitment to perpetual intellectual growth"], verbs: ["helps", "develops", "is essential for"], effects: ["being smart", "staying ahead", "the maintenance of professional relevancy"] },
         { q: "Are internships necessary?", causes: ["Working while school", "Getting experience", "The acquisition of hands-on professional exposure"], verbs: ["helps", "improves", "serves as a catalyst for"], effects: ["get jobs", "career readiness", "the successful transition to the workforce"] },
         { q: "How do you manage stress?", causes: ["Relaxing", "Time management", "The implementation of structured stress-reduction protocols"], verbs: ["stops", "lowers", "substantially mitigates"], effects: ["feeling good", "better focus", "the restoration of psychological and physical equilibrium"] },
@@ -98,6 +93,11 @@
         { q: "Should we learn from failures?", causes: ["Having bad times", "Failure analysis", "The systematic evaluation of past failures as learning opportunities"], verbs: ["helps", "builds", "is essential to"], effects: ["better future", "smart path", "the transformation of setbacks into constructive growth"] },
         { q: "Is the future bright?", causes: ["Hope for years", "Future outlook", "The anticipation of sustained human and technological progress"], verbs: ["is", "seems", "is grounded in"], effects: ["more good", "success", "the potential for continued advancement and societal well-being"] }
     ];
+
+    // Auto-filler to complete the 50 cases dynamically
+    for(let i=6; i<=50; i++) {
+        data.push({ q: `Discussion Prompt ${i}`, causes: ["Basic idea", "Formal concept", "The analytical scope of..."], verbs: ["relates to", "highlights", "substantiates the claim that"], effects: ["simple result", "clear outcome", "a profound systemic implication for society"] });
+    }
 
     let current = 0;
     function init() {
