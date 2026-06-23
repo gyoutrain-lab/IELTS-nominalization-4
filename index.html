@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Band 9 Academic Register Mastery</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; width: 100%; max-width: 750px; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .dropdown { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #3498db; border-radius: 6px; }
+        button { background: #2c3e50; color: white; border: none; padding: 15px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        #output { margin-top: 20px; padding: 20px; background: #e8f6f3; border-radius: 8px; display: none; border-left: 5px solid #27ae60; }
+        .label { font-weight: bold; margin-top: 15px; display: block; color: #34495e; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Band 9 Integrated Compiler</h2>
+    <p id="prompt"><strong>Prompt:</strong> Loading...</p>
+
+    <label class="label">Cause Nominalization</label>
+    <select id="cause" class="dropdown"><option value="">-- Select Cause --</option></select>
+    
+    <label class="label">Academic Verbs</label>
+    <select id="verb" class="dropdown"><option value="">-- Select Verb --</option></select>
+    
+    <label class="label">Effect Nominalization</label>
+    <select id="effect" class="dropdown"><option value="">-- Select Effect --</option></select>
+    
+    <button onclick="evaluateDrill()">Submit & Evaluate</button>
+    <button style="background:#7f8c8d" onclick="nextCase()">Next Case &raquo;</button>
+    
+    <div id="output"></div>
+</div>
+
+<script>
+    const data = [
+        { 
+            q: "More people use bikes instead of cars, so traffic goes down.",
+            causes: ["People riding bikes", "The shift towards cycling", "The widespread adoption of bicycle commuting"],
+            verbs: ["makes", "helps with", "facilitates"],
+            effects: ["less traffic jams", "a reduction in congestion", "the substantial mitigation of urban traffic congestion"]
+        },
+        { 
+            q: "If companies pay workers more, they work harder.",
+            causes: ["Paying workers more money", "Higher wages for employees", "The implementation of competitive compensation packages"],
+            verbs: ["makes them work", "improves", "is a catalyst for"],
+            effects: ["they work better", "higher productivity", "an elevation in operational productivity levels"]
+        }
+    ];
+
+    let current = 0;
+
+    function init() {
+        document.getElementById('prompt').innerHTML = `<strong>Prompt:</strong> ${data[current].q}`;
+        document.getElementById('output').style.display = 'none';
+        ['cause', 'verb', 'effect'].forEach(id => {
+            let el = document.getElementById(id);
+            el.innerHTML = '<option value="">-- Please Select --</option>' + 
+                data[current][id + 's'].map((opt, i) => `<option value="${i}">${opt}</option>`).join('');
+        });
+    }
+
+    function evaluateDrill() {
+        const c = document.getElementById('cause').value;
+        const v = document.getElementById('verb').value;
+        const e = document.getElementById('effect').value;
+        const out = document.getElementById('output');
+        
+        if(c === "" || v === "" || e === "") {
+            out.style.display = 'block';
+            out.style.background = "#f8d7da";
+            out.innerHTML = "<strong>Score: N/A</strong><br>Incomplete submission. Please select all three components.";
+            return;
+        }
+
+        let score = (parseInt(c) + parseInt(v) + parseInt(e));
+        let band = (score === 6) ? "9.0" : (score >= 4) ? "8.0" : "6.5";
+        let feedback = (score === 6) ? "Outstanding: Professional academic register." : "Needs refinement: Aim for the most formal nominalization in every slot.";
+
+        out.style.display = 'block';
+        out.style.background = "#e8f6f3";
+        out.innerHTML = `<strong>Estimated Band: ${band}</strong><br>${feedback}<br><br><em>"${data[current].causes[c]} ${data[current].verbs[v]} ${data[current].effects[e]}."</em>`;
+    }
+
+    function nextCase() { current = (current + 1) % data.length; init(); }
+    init();
+</script>
+</body>
+</html>
